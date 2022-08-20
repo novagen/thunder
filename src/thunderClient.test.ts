@@ -74,5 +74,6 @@ describe('Config', () => {
     it(`Should be able to call stop`, () => {
         const client = new ThunderClient();
         expect(client.stop()).to.equal(undefined);
+        expect(client.getClient()).to.equal(null);
     });
 });

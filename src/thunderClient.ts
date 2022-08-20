@@ -83,6 +83,14 @@ export class ThunderClient extends EventEmitter {
         }
     }
 
+    /**
+     * Get the current websocket connection.
+     * @returns {WebSocket} The current websocket connection.
+     */
+    public getClient(): WebSocket | null {
+        return this.client;
+    }
+
     private onMessage(m: MessageEvent): void {
         const data: SMHI.Strike = JSON.parse(m.data as string);
 
