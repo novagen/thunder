@@ -19,7 +19,7 @@ jobs:
       - run: npm install
         env:
           NPM_TOKEN: ${{ secrets.BUILDER_TOKEN }}
-      - run: npm run doc:wiki
+      - run: npm run doc:github
       - name: Upload Documentation to Wiki
         uses: SwiftDocOrg/github-wiki-publish-action@v1
         with:
