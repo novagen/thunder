@@ -14,10 +14,11 @@
         "build": "tsc --build",
         "prebuild": "rimraf dist && npm run lint",
         "lint": "eslint ./src/",
-        "clean:all": "npm run clean:dist && npm run clean:coverage && npm run clean:modules",
+        "clean:all": "npm run clean:dist && npm run clean:coverage && npm run clean:modules && npm run clean:doc",
         "clean:dist": "rimraf dist",
         "clean:coverage": "rimraf coverage",
         "clean:modules": "rimraf node_modules",
+        "clean:docs": "rimraf doc",
         "prepack": "npm run build",
         "doc": "typedoc",
         "doc:github": "typedoc --theme github-wiki"

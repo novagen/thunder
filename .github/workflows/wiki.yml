@@ -1,0 +1,28 @@
+name: Generate Wiki
+
+on:
+  push:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v2
+        name: Install and generate
+        with:
+          node-version: '16.x'
+      - run: npm install
+        env:
+          NPM_TOKEN: ${{ secrets.BUILDER_TOKEN }}
+      - run: npm run doc:wiki
+      - name: Upload Documentation to Wiki
+        uses: SwiftDocOrg/github-wiki-publish-action@v1
+        with:
+          path: "doc"
+        env:
+          GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.BUILDER_TOKEN }}
