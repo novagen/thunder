@@ -37,7 +37,7 @@ export class ThunderClient extends EventEmitter {
      * @param {string} password The password to use for authentication. If not provied the SMHI_PASSWORD environment variable will be used.
      * @returns {ThunderClient} A new ThunderClient instance.
      */
-    public constructor(username: string | undefined, password: string | undefined) {
+    public constructor(username: string | undefined = undefined, password: string | undefined = undefined) {
         super();
 
         this.config = this.createConfig(username, password);

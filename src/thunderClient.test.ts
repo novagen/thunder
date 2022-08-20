@@ -1,7 +1,7 @@
 import { expect, describe, it } from 'vitest';
 
 import { ThunderClient } from '../src';
-const client = ThunderClient.getInstance();
+const client = new ThunderClient();
 
 describe('Config', () => {
     it(`Should be able to call stop`, () => {
