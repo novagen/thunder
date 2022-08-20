@@ -48,18 +48,22 @@ export class ThunderClient extends EventEmitter {
      * @param {boolean} noEmit If true, the client will not emit the STARTED event.
      * @returns {void}
      */
-    public start(noEmit = false): void {
-        if (!this.client) {
-            this.client = this.createClient();
-        }
+    public async start(noEmit = false): Promise<void> {
+        const promise = new Promise<void>((resolve, reject) => {
+            if (!this.client) {
+                this.client = this.createClient(resolve, reject);
+            }
 
-        if (this.client) {
-            this.client.onmessage = (e): void => this.onMessage(e);
-        }
+            if (this.client) {
+                this.client.onmessage = (e): void => this.onMessage(e);
+            }
 
-        if (!noEmit) {
-            this.emit(ThunderClient.STARTED);
-        }
+            if (!noEmit) {
+                this.emit(ThunderClient.STARTED);
+            }
+        });
+
+        return promise;
     }
 
     /**
@@ -91,11 +95,19 @@ export class ThunderClient extends EventEmitter {
         this.emit(ThunderClient.STRIKE, data);
     }
 
-    private createClient(): WebSocket {
+    private createClient(resolve: (value: void | PromiseLike<void>) => void, reject: () => void): WebSocket {
         const client = new WebSocket(this.config.url, 'echo-protocol', {
             headers: {
                 'Authorization': this.getAuthorization()
             }
+        });
+
+        client.once('open', (): void => {
+            resolve();
+        });
+
+        client.once('close', (): void => {
+            reject();
         });
 
         client.onopen = (): void => {
