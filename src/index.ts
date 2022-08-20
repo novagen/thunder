@@ -1,7 +1,8 @@
-import { Strike, Meta, Position } from "./types";
+import { Config, Strike, Meta, Position } from "./types";
 import { ThunderClient } from "./thunderClient";
 
 export {
+    Config,
     ThunderClient,
     Strike,
     Meta,
