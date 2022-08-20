@@ -14,7 +14,7 @@
         "build": "tsc --build",
         "prebuild": "rimraf dist && npm run lint",
         "lint": "eslint ./src/",
-        "clean:build": "npm run clean:dist && npm run clean:coverage && npm run clean:doc",
+        "clean:build": "npm run clean:dist && npm run clean:coverage && npm run clean:docs",
         "clean:dist": "rimraf dist",
         "clean:coverage": "rimraf coverage",
         "clean:modules": "rimraf node_modules",
