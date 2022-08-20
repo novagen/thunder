@@ -13,8 +13,8 @@
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
+        "experimentalDecorators": false,
+        "emitDecoratorMetadata": false,
         "noImplicitUseStrict": false
     },
     "include": [
