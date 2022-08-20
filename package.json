@@ -1,0 +1,50 @@
+{
+    "name": "thunder",
+    "version": "1.0.0",
+    "description": "A client for the SMHI Open Data Thunder API",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "test": "vitest run",
+        "test:ui": "vitest --ui",
+        "test:watch": "vitest",
+        "coverage": "vitest run --coverage",
+        "coverage:html": "vitest run --coverage --reporter html",
+        "build": "tsc --build",
+        "prebuild": "rimraf dist && npm run lint",
+        "lint": "eslint ./src/",
+        "clean:all": "npm run clean:dist && npm run clean:coverage && npm run clean:modules",
+        "clean:dist": "rimraf dist",
+        "clean:coverage": "rimraf coverage",
+        "clean:modules": "rimraf node_modules"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/novagen/thunder.git"
+    },
+    "files": [
+        "dist"
+    ],
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/novagen/thunder/issues"
+    },
+    "homepage": "https://github.com/novagen/thunder#readme",
+    "dependencies": {
+        "ws": "^8.8.1"
+    },
+    "devDependencies": {
+        "@types/node": "^18.7.8",
+        "@types/ws": "^8.5.3",
+        "@typescript-eslint/eslint-plugin": "^5.33.1",
+        "@typescript-eslint/parser": "^5.33.1",
+        "@vitest/coverage-c8": "^0.22.1",
+        "@vitest/ui": "^0.22.1",
+        "eslint": "^8.22.0",
+        "rimraf": "^3.0.2",
+        "typescript": "^4.7.4",
+        "vitest": "^0.22.1"
+    }
+}
