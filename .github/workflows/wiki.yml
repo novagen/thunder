@@ -1,4 +1,4 @@
-name: Generate Wiki
+name: Documentation
 
 on:
   push:
