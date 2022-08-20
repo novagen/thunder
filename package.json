@@ -25,7 +25,7 @@
     "files": [
         "dist"
     ],
-    "keywords": [],
+    "keywords": ["SMHI", "Open Data", "Thunder", "Lightning", "Node"],
     "author": "",
     "license": "ISC",
     "bugs": {
