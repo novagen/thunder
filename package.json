@@ -18,7 +18,9 @@
         "clean:dist": "rimraf dist",
         "clean:coverage": "rimraf coverage",
         "clean:modules": "rimraf node_modules",
-        "prepack": "npm run build"
+        "prepack": "npm run build",
+        "doc": "typedoc",
+        "doc:github": "typedoc --theme github-wiki"
     },
     "repository": {
         "type": "git",
@@ -27,7 +29,13 @@
     "files": [
         "dist"
     ],
-    "keywords": ["SMHI", "Open Data", "Thunder", "Lightning", "Node"],
+    "keywords": [
+        "SMHI",
+        "Open Data",
+        "Thunder",
+        "Lightning",
+        "Node"
+    ],
     "author": "",
     "license": "ISC",
     "bugs": {
@@ -46,6 +54,10 @@
         "@vitest/ui": "^0.22.1",
         "eslint": "^8.22.0",
         "rimraf": "^3.0.2",
+        "typedoc": "^0.23.10",
+        "typedoc-github-wiki-theme": "^1.0.1",
+        "typedoc-plugin-markdown": "^3.13.4",
+        "typedoc-plugin-missing-exports": "^1.0.0",
         "typescript": "^4.7.4",
         "vitest": "^0.22.1"
     }

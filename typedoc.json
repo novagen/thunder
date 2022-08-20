@@ -1,0 +1,11 @@
+{
+    "entryPoints": [ "./src" ],
+    "out": "doc",
+    "readme": "README.md",
+    "excludePrivate": true,
+    "excludeExternals": true,
+    "excludeProtected": false,
+    "exclude": [ "test" ],
+    "hideGenerator": true,
+    "namedAnchors": true
+}
