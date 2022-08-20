@@ -54,7 +54,7 @@ export class ThunderClient extends EventEmitter {
         }
 
         if (this.client) {
-            this.client.onmessage = this.onMessage;
+            this.client.onmessage = (e): void => this.onMessage(e);
         }
 
         if (!noEmit) {
@@ -80,7 +80,7 @@ export class ThunderClient extends EventEmitter {
     }
 
     private onMessage(m: MessageEvent): void {
-        const data: SMHI.Strike = JSON.parse(m.data.toString());
+        const data: SMHI.Strike = JSON.parse(m.data as string);
 
         if (data.countryCode == 'ZZ') {
             this.heartbeat = new Date();
