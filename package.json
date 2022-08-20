@@ -10,7 +10,6 @@
         "test:ui": "vitest --ui",
         "test:watch": "vitest",
         "coverage": "vitest run --coverage",
-        "coverage:html": "vitest run --coverage --reporter html",
         "build": "tsc --build",
         "prebuild": "rimraf dist && npm run lint",
         "lint": "eslint ./src/",
