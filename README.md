@@ -13,10 +13,10 @@ npm install @novagen/thunder
 ## Usage
 
 ```js
-import { ThunderClient } from '@novagen/thunder';
+import * as Thunder from '@novagen/thunder';
 
-const thunder = new ThunderClient('my-username', 'my-password');
-thunder.on(ThunderClient.STRIKE, (s) => { console.log(s); });
+const client = new Thunder.Client('my-username', 'my-password');
+client.on(Thunder.Events.STRIKE, (s) => { console.log(s); });
 
-thunder.start();
+client.start();
 ```
