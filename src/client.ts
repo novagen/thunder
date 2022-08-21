@@ -2,27 +2,9 @@ import EventEmitter from 'events';
 import { WebSocket, MessageEvent } from 'ws';
 import { Config } from './types';
 import * as SMHI from './types/smhi';
+import { Events } from './events';
 
-export class ThunderClient extends EventEmitter {
-    /** Emitted if an error occurs. */
-    public static readonly ERROR = 'ERROR';
-    /** Emitted when a lightning strike is received. */
-    public static readonly STRIKE = 'STRIKE';
-    /** Emitted when a heartbeat is received. */
-    public static readonly HEARTBEAT = 'HEARTBEAT';
-    /** Emitted when the websocket is opened. */
-    public static readonly OPENED = 'OPENED';
-    /** Emitted when the websocket is closed. */
-    public static readonly CLOSED = 'CLOSED';
-    /** Emitted when the websocket connection was unauthorized. */
-    public static readonly UNAUTHORIZED = 'UNAUTHORIZED';
-    /** Emitted when the client is started. */
-    public static readonly STARTED = 'STARTED';
-    /** Emitted when the client is stopped. */
-    public static readonly STOPPED = 'STOPPED';
-    /** Emitted when a timeout occurs. The client will try to reconnect. */
-    public static readonly TIMEOUT = 'TIMEOUT';
-
+export class Client extends EventEmitter {
     private static readonly hearbeatTimeout = 35000;
     private static readonly heartbeatInterval = 1000;
 
@@ -35,7 +17,7 @@ export class ThunderClient extends EventEmitter {
      * Create a new ThunderClient.
      * @param {string} username The username to use for authentication. If not provied the SMHI_USERNAME environment variable will be used.
      * @param {string} password The password to use for authentication. If not provied the SMHI_PASSWORD environment variable will be used.
-     * @returns {ThunderClient} A new ThunderClient instance.
+     * @returns {Client} A new ThunderClient instance.
      */
     public constructor(username: string | undefined = undefined, password: string | undefined = undefined) {
         super();
@@ -59,7 +41,7 @@ export class ThunderClient extends EventEmitter {
             }
 
             if (!noEmit) {
-                this.emit(ThunderClient.STARTED);
+                this.emit(Events.STARTED);
             }
         });
 
@@ -79,7 +61,7 @@ export class ThunderClient extends EventEmitter {
         }
 
         if (!noEmit) {
-            this.emit(ThunderClient.STOPPED);
+            this.emit(Events.STOPPED);
         }
     }
 
@@ -96,11 +78,11 @@ export class ThunderClient extends EventEmitter {
 
         if (data.countryCode == 'ZZ') {
             this.heartbeat = new Date();
-            this.emit(ThunderClient.HEARTBEAT, this.heartbeat);
+            this.emit(Events.HEARTBEAT, this.heartbeat);
             return;
         }
 
-        this.emit(ThunderClient.STRIKE, data);
+        this.emit(Events.STRIKE, data);
     }
 
     private createClient(resolve: (value: void | PromiseLike<void>) => void, reject: () => void): WebSocket {
@@ -119,8 +101,8 @@ export class ThunderClient extends EventEmitter {
         });
 
         client.onopen = (): void => {
-            this.heartbeatTimeout = setInterval(() => this.checkHeartbeat(), ThunderClient.heartbeatInterval);
-            this.emit(ThunderClient.OPENED);
+            this.heartbeatTimeout = setInterval(() => this.checkHeartbeat(), Client.heartbeatInterval);
+            this.emit(Events.OPENED);
         };
 
         client.onclose = (): void => {
@@ -129,16 +111,16 @@ export class ThunderClient extends EventEmitter {
                 this.heartbeatTimeout = null;
             }
 
-            this.emit(ThunderClient.CLOSED);
+            this.emit(Events.CLOSED);
         };
 
         client.onerror = (e): void => {
             if (e.message === 'Unexpected server response: 401') {
-                this.emit(ThunderClient.UNAUTHORIZED);
+                this.emit(Events.UNAUTHORIZED);
                 return;
             }
 
-            this.emit(ThunderClient.ERROR, e);
+            this.emit(Events.ERROR, e);
         };
 
         return client;
@@ -158,8 +140,8 @@ export class ThunderClient extends EventEmitter {
     }
 
     private checkHeartbeat(): void {
-        if (this.heartbeat.getTime() + ThunderClient.hearbeatTimeout < new Date().getTime()) {
-            this.emit(ThunderClient.TIMEOUT);
+        if (this.heartbeat.getTime() + Client.hearbeatTimeout < new Date().getTime()) {
+            this.emit(Events.TIMEOUT);
             this.stop(true);
             this.start(true);
         }
@@ -167,5 +149,5 @@ export class ThunderClient extends EventEmitter {
 }
 
 export {
-    ThunderClient as SMHIClient
+    Client as SMHIClient
 };

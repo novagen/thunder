@@ -107,3 +107,4 @@ dist
 doc
 src/test*.js
 .vscode
+snippets

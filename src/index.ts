@@ -1,10 +1,12 @@
 import { Config, Strike, Meta, Position } from "./types";
-import { ThunderClient } from "./thunderClient";
+import { Client } from "./client";
+import { Events } from "./events";
 
 export {
     Config,
-    ThunderClient,
+    Client,
     Strike,
     Meta,
-    Position
+    Position,
+    Events
 };
