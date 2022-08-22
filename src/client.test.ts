@@ -41,7 +41,7 @@ const sendStrike = async (): Promise<void> => {
 
 const delay = (): Promise<void> => new Promise(resolve => setTimeout(resolve, 20));
 
-describe('Config', () => {
+describe('Client', () => {
     it(`Should be able to call start`, async () => {
         const client = new Thunder.Client();
         expect(await client.start()).to.equal(undefined);
@@ -56,6 +56,7 @@ describe('Config', () => {
 
         await client.start();
         await sendHeartbeat();
+
         expect(spy).to.be.toHaveBeenCalledOnce();
     });
 
@@ -68,12 +69,31 @@ describe('Config', () => {
 
         await client.start();
         await sendStrike();
+
         expect(spy).to.be.toHaveBeenCalledOnce();
     });
 
     it(`Should be able to call stop`, () => {
         const client = new Thunder.Client();
         expect(client.stop()).to.equal(undefined);
-        expect(client.getClient()).to.equal(null);
     });
+
+    it(`WebSocket should be NOT be null after start`, async () => {
+        const client = new Thunder.Client();
+
+        await client.start();
+
+        expect(client.getWebSocket()).to.toBeTypeOf('object');
+        client.stop();
+    });
+
+    it(`WebSocket should be be null after stop`, async () => {
+        const client = new Thunder.Client();
+
+        await client.start();
+        client.stop();
+
+        expect(client.getWebSocket()).to.equal(null);
+    });
+
 });

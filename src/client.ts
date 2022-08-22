@@ -1,7 +1,6 @@
 import EventEmitter from 'events';
 import { WebSocket, MessageEvent } from 'ws';
-import { Config } from './types';
-import * as SMHI from './types/smhi';
+import { Config, Strike } from './types';
 import { Events } from './events';
 
 export class Client extends EventEmitter {
@@ -69,12 +68,12 @@ export class Client extends EventEmitter {
      * Get the current websocket connection.
      * @returns {WebSocket} The current websocket connection.
      */
-    public getClient(): WebSocket | null {
+    public getWebSocket(): WebSocket | null {
         return this.client;
     }
 
     private onMessage(m: MessageEvent): void {
-        const data: SMHI.Strike = JSON.parse(m.data as string);
+        const data: Strike = JSON.parse(m.data as string);
 
         if (data.countryCode == 'ZZ') {
             this.heartbeat = new Date();
@@ -147,7 +146,3 @@ export class Client extends EventEmitter {
         }
     }
 }
-
-export {
-    Client as SMHIClient
-};
