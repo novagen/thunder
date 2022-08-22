@@ -2,13 +2,11 @@
 
 A client for the [SMHI Open Data API](https://opendata.smhi.se/apidocs/pls/index.html) for lightning strikes
 
-
 ## Installation
 
 ```bash
 npm install @novagen/thunder
 ```
-
 
 ## Usage
 
