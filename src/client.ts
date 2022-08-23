@@ -2,15 +2,16 @@ import EventEmitter from 'events';
 import { WebSocket, MessageEvent } from 'ws';
 import { Config, Strike } from './types';
 import { Events } from './events';
+import { Heartbeat } from './heartbeat';
+
+const SMHI_URL = 'ws://data-push.smhi.se/api/category/lightning-strike/version/1/country-code/SE/data.json';
+const SMHI_TIMEOUT = 35000;
+const SMHI_INTERVAL = 1000;
 
 export class Client extends EventEmitter {
-    private static readonly hearbeatTimeout = 35000;
-    private static readonly heartbeatInterval = 1000;
-
     private client: WebSocket | null = null;
-    private heartbeat: Date = new Date();
     private config: Config;
-    private heartbeatTimeout: NodeJS.Timeout | null = null;
+    private heartbeat: Heartbeat;
 
     /**
      * Create a new ThunderClient.
@@ -22,6 +23,11 @@ export class Client extends EventEmitter {
         super();
 
         this.config = this.createConfig(username, password);
+        this.heartbeat = new Heartbeat(SMHI_TIMEOUT, SMHI_INTERVAL, () => {
+            this.emit(Events.TIMEOUT);
+            this.stop(true);
+            this.start(true);
+        });
     }
 
     /**
@@ -76,7 +82,7 @@ export class Client extends EventEmitter {
         const data: Strike = JSON.parse(m.data as string);
 
         if (data.countryCode == 'ZZ') {
-            this.heartbeat = new Date();
+            this.heartbeat.beat();
             this.emit(Events.HEARTBEAT, this.heartbeat);
             return;
         }
@@ -100,16 +106,12 @@ export class Client extends EventEmitter {
         });
 
         client.onopen = (): void => {
-            this.heartbeatTimeout = setInterval(() => this.checkHeartbeat(), Client.heartbeatInterval);
+            this.heartbeat.start();
             this.emit(Events.OPENED);
         };
 
         client.onclose = (): void => {
-            if (this.heartbeatTimeout) {
-                clearInterval(this.heartbeatTimeout);
-                this.heartbeatTimeout = null;
-            }
-
+            this.heartbeat.stop();
             this.emit(Events.CLOSED);
         };
 
@@ -127,22 +129,16 @@ export class Client extends EventEmitter {
 
     private createConfig(username: string | undefined, password: string | undefined): Config {
         return {
-            url: process.env.SMHI_URL ?? 'ws://data-push.smhi.se/api/category/lightning-strike/version/1/country-code/SE/data.json',
             username: username ?? process.env.SMHI_USERNAME,
-            password: password ?? process.env.SMHI_PASSWORD
+            password: password ?? process.env.SMHI_PASSWORD,
+            url: process.env.SMHI_URL ?? SMHI_URL,
+            timeout: process.env.SMHI_TIMEOUT ? parseInt(process.env.SMHI_TIMEOUT) : SMHI_TIMEOUT,
+            interval: process.env.SMHI_INTERVAL ? parseInt(process.env.SMHI_INTERVAL) : SMHI_INTERVAL
         };
     }
 
     private getAuthorization(): string {
         const auth = 'Basic ' + Buffer.from(this.config.username + ':' + this.config.password).toString('base64');
         return `Bearer ${auth}`;
-    }
-
-    private checkHeartbeat(): void {
-        if (this.heartbeat.getTime() + Client.hearbeatTimeout < new Date().getTime()) {
-            this.emit(Events.TIMEOUT);
-            this.stop(true);
-            this.start(true);
-        }
     }
 }
