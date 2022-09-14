@@ -95,5 +95,4 @@ describe('Client', () => {
 
         expect(client.getWebSocket()).to.equal(null);
     });
-
 });

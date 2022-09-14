@@ -4,8 +4,9 @@
     "readme": "README.md",
     "excludePrivate": true,
     "excludeExternals": true,
-    "excludeProtected": false,
-    "exclude": [ "test" ],
+    "excludeProtected": true,
+    "excludeInternal": true,
+    "exclude": [ "**/*.test.ts" ],
     "hideGenerator": true,
     "namedAnchors": true
 }

@@ -47,19 +47,19 @@
         "ws": "^8.8.1"
     },
     "devDependencies": {
-        "@types/node": "^18.7.8",
+        "@types/node": "^18.7.18",
         "@types/ws": "^8.5.3",
-        "@typescript-eslint/eslint-plugin": "^5.33.1",
-        "@typescript-eslint/parser": "^5.33.1",
-        "@vitest/coverage-c8": "^0.22.1",
-        "@vitest/ui": "^0.22.1",
-        "eslint": "^8.22.0",
+        "@typescript-eslint/eslint-plugin": "^5.37.0",
+        "@typescript-eslint/parser": "^5.37.0",
+        "@vitest/coverage-c8": "^0.23.2",
+        "@vitest/ui": "^0.23.2",
+        "eslint": "^8.23.1",
         "rimraf": "^3.0.2",
-        "typedoc": "^0.23.10",
+        "typedoc": "^0.23.14",
         "typedoc-github-wiki-theme": "^1.0.1",
-        "typedoc-plugin-markdown": "^3.13.4",
+        "typedoc-plugin-markdown": "^3.13.6",
         "typedoc-plugin-missing-exports": "^1.0.0",
-        "typescript": "^4.7.4",
-        "vitest": "^0.22.1"
+        "typescript": "^4.8.3",
+        "vitest": "^0.23.2"
     }
 }
