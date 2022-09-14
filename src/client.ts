@@ -35,7 +35,7 @@ export class Client extends EventEmitter {
      * @param {boolean} noEmit If true, the client will not emit the STARTED event.
      * @returns {void}
      */
-    public async start(noEmit = false): Promise<void> {
+    public start(noEmit = false): Promise<void> {
         const promise = new Promise<void>((resolve, reject) => {
             if (!this.client) {
                 this.client = this.createClient(resolve, reject);

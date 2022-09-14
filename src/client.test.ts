@@ -4,11 +4,13 @@ import { WebSocketServer } from 'ws';
 
 process.env.SMHI_URL = "ws://localhost:8971";
 
+const delay = (): Promise<void> => new Promise(resolve => setTimeout(resolve, 20));
+
 const wss = new WebSocketServer({
     port: 8971
 });
 
-const sendHeartbeat = async (): Promise<void> => {
+const sendHeartbeat = (): Promise<void> => {
     for (const client of wss.clients) {
         client.send(JSON.stringify({
             time: new Date().toISOString(),
@@ -19,7 +21,7 @@ const sendHeartbeat = async (): Promise<void> => {
     return delay();
 };
 
-const sendStrike = async (): Promise<void> => {
+const sendStrike = (): Promise<void> => {
     for (const client of wss.clients) {
         client.send(JSON.stringify({
             time: new Date().toISOString(),
@@ -38,8 +40,6 @@ const sendStrike = async (): Promise<void> => {
 
     return delay();
 };
-
-const delay = (): Promise<void> => new Promise(resolve => setTimeout(resolve, 20));
 
 describe('Client', () => {
     it(`Should be able to call start`, async () => {

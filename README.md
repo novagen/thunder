@@ -1,5 +1,7 @@
 # Thunder
 
+[![codecov](https://codecov.io/gh/novagen/thunder/branch/main/graph/badge.svg?token=R3O89HGZ9A)](https://codecov.io/gh/novagen/thunder)
+
 A client for the [SMHI Open Data API](https://opendata.smhi.se/apidocs/pls/index.html) for lightning strikes
 
 ## Installation
