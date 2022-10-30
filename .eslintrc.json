@@ -1,4 +1,4 @@
-module.exports = {
+{
     "env": {
         "browser": true,
         "commonjs": true,
@@ -36,14 +36,14 @@ module.exports = {
         "@typescript-eslint/comma-dangle": ["error", "never"],
         "@typescript-eslint/explicit-function-return-type": ["error"],
         "no-console": ["error", {
-            allow: ["warn", "error", "info", "debug"]
+            "allow": ["warn", "error", "info", "debug"]
         }],
         "no-multi-spaces": ["error", {
-            ignoreEOLComments: false
+            "ignoreEOLComments": false
         }],
         "no-multiple-empty-lines": ["error", {
             "max": 1,
             "maxEOF": 0
         }]
     }
-};
+}
