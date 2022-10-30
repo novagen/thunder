@@ -1,5 +1,5 @@
 {
-    "name": "@novagen/smhi-thunder",
+    "name": "smhi-thunder",
     "version": "1.0.1",
     "description": "A client for the SMHI Open Data Thunder API",
     "main": "dist/index.js",
