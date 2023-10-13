@@ -7,6 +7,5 @@
     "excludeProtected": true,
     "excludeInternal": true,
     "exclude": [ "**/*.test.ts" ],
-    "hideGenerator": true,
-    "namedAnchors": true
+    "hideGenerator": true
 }

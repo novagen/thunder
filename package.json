@@ -21,7 +21,7 @@
         "clean:docs": "rimraf doc",
         "prepack": "npm run build",
         "doc": "typedoc",
-        "doc:github": "typedoc --theme github-wiki"
+        "doc:github": "typedoc --plugin typedoc-plugin-markdown --plugin typedoc-github-wiki-theme"
     },
     "repository": {
         "type": "git",
