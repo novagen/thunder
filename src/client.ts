@@ -8,6 +8,9 @@ const SMHI_URL = 'ws://data-push.smhi.se/api/category/lightning-strike/version/1
 const SMHI_TIMEOUT = 35000;
 const SMHI_INTERVAL = 1000;
 
+/**
+ * Thunder Client.
+ */
 export class Client extends EventEmitter {
     private _client: WebSocket | null = null;
     private _config: Config;
@@ -18,6 +21,8 @@ export class Client extends EventEmitter {
      * @param {string} username The username to use for authentication. If not provied the SMHI_USERNAME environment variable will be used.
      * @param {string} password The password to use for authentication. If not provied the SMHI_PASSWORD environment variable will be used.
      * @returns {Client} A new ThunderClient instance.
+     * @constructor
+     * @public
      */
     public constructor(username: string | undefined = undefined, password: string | undefined = undefined) {
         super();
@@ -30,10 +35,18 @@ export class Client extends EventEmitter {
         });
     }
 
+    /** 
+     * Get configuration.
+     * @returns {Config} The configuration.
+     */
     public get config(): Config {
         return this._config;
     }
 
+    /**
+     * Get heartbeat monitor.
+     * @returns {Heartbeat} The heartbeat monitor.
+     */
     public get heartbeat(): Heartbeat {
         return this._heartbeat;
     }
@@ -86,6 +99,10 @@ export class Client extends EventEmitter {
         return this._client;
     }
 
+    /**
+     * Handler for incoming messages.
+     * @param {MessageEvent} m The message event.
+     */
     private onMessage(m: MessageEvent): void {
         const data: Strike = JSON.parse(m.data as string);
 
@@ -98,6 +115,12 @@ export class Client extends EventEmitter {
         this.emit(Events.STRIKE, data);
     }
 
+    /**
+     * Create websocket client.
+     * @param {Function} resolve The resolve function.
+     * @param {Function} reject The reject function.
+     * @returns {WebSocket} The websocket client.
+     */
     private createClient(resolve: (value: void | PromiseLike<void>) => void, reject: () => void): WebSocket {
         const client = new WebSocket(this._config.url, 'echo-protocol', {
             headers: {
@@ -135,6 +158,12 @@ export class Client extends EventEmitter {
         return client;
     }
 
+    /** 
+     * Create config.
+     * @param {string} username The username to use for authentication. If not provied the SMHI_USERNAME environment variable will be used.
+     * @param {string} password The password to use for authentication. If not provied the SMHI_PASSWORD environment variable will be used.
+     * @returns {Config} The config.
+    */
     private static createConfig(username: string | undefined, password: string | undefined): Config {
         return {
             username: username ?? process.env.SMHI_USERNAME,
@@ -145,10 +174,18 @@ export class Client extends EventEmitter {
         };
     }
 
+    /** 
+     * Create base64 encoded auth string.
+     * @returns {string} The base64 encoded auth string.
+     */
     private getAuthString(): string {
         return Buffer.from(`${this._config.username}:${this._config.password}`).toString('base64');
     }
 
+    /**
+     * Create authorization header.
+     * @returns {string} The authorization header.
+     */
     private getAuthorization(): string {
         const auth = `Basic ${this.getAuthString()}`;
         return `Bearer ${auth}`;
