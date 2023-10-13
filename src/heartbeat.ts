@@ -11,11 +11,13 @@ export class Heartbeat {
         this.onMissed = onMissed;
     }
 
+    /** Start heartbeats. */
     public start(): void {
         this.heartbeat = new Date();
         this.handler = setInterval(() => this.check(), this.interval);
     }
 
+    /** Stop heartbeats. */
     public stop(): void {
         if (this.handler) {
             clearInterval(this.handler);
@@ -23,10 +25,12 @@ export class Heartbeat {
         }
     }
 
+    /** Update timestamp when a heartbeat occurs. */
     public beat(): void {
         this.heartbeat = new Date();
     }
 
+    /** Check when last heartbeat was trigged, and trigger onMissed if it's too long ago. */
     private check(): void {
         if (this.heartbeat.getTime() + this.timeout < new Date().getTime()) {
             this.onMissed();
