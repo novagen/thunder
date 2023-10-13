@@ -95,4 +95,20 @@ describe('Client', () => {
 
         expect(client.getWebSocket()).to.equal(null);
     });
+
+    it("Should create a config with the provided username and password", () => {
+        const username = "testuser";
+        const password = "testpassword";
+        const client = new Client(username, password);
+
+        expect(client.config.username).to.equal(username);
+        expect(client.config.password).to.equal(password);
+    });
+
+    it("Should create a config without a username and password if none are provided", () => {
+        const client = new Client();
+
+        expect(client.config.username).to.equal(undefined);
+        expect(client.config.password).to.equal(undefined);
+    });
 });

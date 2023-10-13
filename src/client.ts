@@ -9,9 +9,9 @@ const SMHI_TIMEOUT = 35000;
 const SMHI_INTERVAL = 1000;
 
 export class Client extends EventEmitter {
-    private client: WebSocket | null = null;
-    private config: Config;
-    private heartbeat: Heartbeat;
+    private _client: WebSocket | null = null;
+    private _config: Config;
+    private _heartbeat: Heartbeat;
 
     /**
      * Create a new ThunderClient.
@@ -22,12 +22,20 @@ export class Client extends EventEmitter {
     public constructor(username: string | undefined = undefined, password: string | undefined = undefined) {
         super();
 
-        this.config = Client.createConfig(username, password);
-        this.heartbeat = new Heartbeat(SMHI_TIMEOUT, SMHI_INTERVAL, () => {
+        this._config = Client.createConfig(username, password);
+        this._heartbeat = new Heartbeat(SMHI_TIMEOUT, SMHI_INTERVAL, () => {
             this.emit(Events.TIMEOUT);
             this.stop(true);
             this.start(true);
         });
+    }
+
+    public get config(): Config {
+        return this._config;
+    }
+
+    public get heartbeat(): Heartbeat {
+        return this._heartbeat;
     }
 
     /**
@@ -37,12 +45,12 @@ export class Client extends EventEmitter {
      */
     public start(noEmit = false): Promise<void> {
         const promise = new Promise<void>((resolve, reject) => {
-            if (!this.client) {
-                this.client = this.createClient(resolve, reject);
+            if (!this._client) {
+                this._client = this.createClient(resolve, reject);
             }
 
-            if (this.client) {
-                this.client.onmessage = (e): void => this.onMessage(e);
+            if (this._client) {
+                this._client.onmessage = (e): void => this.onMessage(e);
             }
 
             if (!noEmit) {
@@ -59,10 +67,10 @@ export class Client extends EventEmitter {
      * @returns {void}
      */
     public stop(noEmit = false): void {
-        if (this.client) {
-            this.client.close();
-            this.client.onmessage = null;
-            this.client = null;
+        if (this._client) {
+            this._client.close();
+            this._client.onmessage = null;
+            this._client = null;
         }
 
         if (!noEmit) {
@@ -75,15 +83,15 @@ export class Client extends EventEmitter {
      * @returns {WebSocket} The current websocket connection.
      */
     public getWebSocket(): WebSocket | null {
-        return this.client;
+        return this._client;
     }
 
     private onMessage(m: MessageEvent): void {
         const data: Strike = JSON.parse(m.data as string);
 
         if (data.countryCode === 'ZZ') {
-            this.heartbeat.beat();
-            this.emit(Events.HEARTBEAT, this.heartbeat);
+            this._heartbeat.beat();
+            this.emit(Events.HEARTBEAT, this._heartbeat);
             return;
         }
 
@@ -91,7 +99,7 @@ export class Client extends EventEmitter {
     }
 
     private createClient(resolve: (value: void | PromiseLike<void>) => void, reject: () => void): WebSocket {
-        const client = new WebSocket(this.config.url, 'echo-protocol', {
+        const client = new WebSocket(this._config.url, 'echo-protocol', {
             headers: {
                 'Authorization': this.getAuthorization()
             }
@@ -106,12 +114,12 @@ export class Client extends EventEmitter {
         });
 
         client.onopen = (): void => {
-            this.heartbeat.start();
+            this._heartbeat.start();
             this.emit(Events.OPENED);
         };
 
         client.onclose = (): void => {
-            this.heartbeat.stop();
+            this._heartbeat.stop();
             this.emit(Events.CLOSED);
         };
 
@@ -138,7 +146,7 @@ export class Client extends EventEmitter {
     }
 
     private getAuthString(): string {
-        return Buffer.from(`${this.config.username}:${this.config.password}`).toString('base64');
+        return Buffer.from(`${this._config.username}:${this._config.password}`).toString('base64');
     }
 
     private getAuthorization(): string {
