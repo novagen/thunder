@@ -22,7 +22,7 @@ export class Client extends EventEmitter {
     public constructor(username: string | undefined = undefined, password: string | undefined = undefined) {
         super();
 
-        this.config = this.createConfig(username, password);
+        this.config = Client.createConfig(username, password);
         this.heartbeat = new Heartbeat(SMHI_TIMEOUT, SMHI_INTERVAL, () => {
             this.emit(Events.TIMEOUT);
             this.stop(true);
@@ -81,7 +81,7 @@ export class Client extends EventEmitter {
     private onMessage(m: MessageEvent): void {
         const data: Strike = JSON.parse(m.data as string);
 
-        if (data.countryCode == 'ZZ') {
+        if (data.countryCode === 'ZZ') {
             this.heartbeat.beat();
             this.emit(Events.HEARTBEAT, this.heartbeat);
             return;
@@ -127,7 +127,7 @@ export class Client extends EventEmitter {
         return client;
     }
 
-    private createConfig(username: string | undefined, password: string | undefined): Config {
+    private static createConfig(username: string | undefined, password: string | undefined): Config {
         return {
             username: username ?? process.env.SMHI_USERNAME,
             password: password ?? process.env.SMHI_PASSWORD,
@@ -138,7 +138,7 @@ export class Client extends EventEmitter {
     }
 
     private getAuthString(): string {
-        return Buffer.from(this.config.username + ':' + this.config.password).toString('base64');
+        return Buffer.from(`${this.config.username}:${this.config.password}`).toString('base64');
     }
 
     private getAuthorization(): string {

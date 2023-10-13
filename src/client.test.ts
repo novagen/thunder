@@ -42,12 +42,12 @@ const sendStrike = (): Promise<void> => {
 };
 
 describe('Client', () => {
-    it(`Should be able to call start`, async () => {
+    it("Should be able to call start", async () => {
         const client = new Client();
         expect(await client.start()).to.equal(undefined);
     });
 
-    it(`Should receive heartbeat`, async () => {
+    it("Should receive heartbeat", async () => {
         const client = new Client();
         const heartbeat = { func: (): void => { /** empty */} };
         const spy = vi.spyOn(heartbeat, 'func');
@@ -60,7 +60,7 @@ describe('Client', () => {
         expect(spy).to.be.toHaveBeenCalledOnce();
     });
 
-    it(`Should receive strike`, async () => {
+    it("Should receive strike", async () => {
         const client = new Client();
         const strike = { func: (): void => { /** empty */} };
         const spy = vi.spyOn(strike, 'func');
@@ -73,12 +73,12 @@ describe('Client', () => {
         expect(spy).to.be.toHaveBeenCalledOnce();
     });
 
-    it(`Should be able to call stop`, () => {
+    it("Should be able to call stop", () => {
         const client = new Client();
         expect(client.stop()).to.equal(undefined);
     });
 
-    it(`WebSocket should be NOT be null after start`, async () => {
+    it("WebSocket should be NOT be null after start", async () => {
         const client = new Client();
 
         await client.start();
@@ -87,7 +87,7 @@ describe('Client', () => {
         client.stop();
     });
 
-    it(`WebSocket should be be null after stop`, async () => {
+    it("WebSocket should be be null after stop", async () => {
         const client = new Client();
 
         await client.start();
