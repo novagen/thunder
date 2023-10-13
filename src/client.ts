@@ -137,8 +137,12 @@ export class Client extends EventEmitter {
         };
     }
 
+    private getAuthString(): string {
+        return Buffer.from(this.config.username + ':' + this.config.password).toString('base64');
+    }
+
     private getAuthorization(): string {
-        const auth = 'Basic ' + Buffer.from(this.config.username + ':' + this.config.password).toString('base64');
+        const auth = `Basic ${this.getAuthString()}`;
         return `Bearer ${auth}`;
     }
 }

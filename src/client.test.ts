@@ -1,5 +1,5 @@
 import { expect, describe, it, vi } from 'vitest';
-import * as Thunder from '.';
+import { Client, Events } from '.';
 import { WebSocketServer } from 'ws';
 
 process.env.SMHI_URL = "ws://localhost:8971";
@@ -43,16 +43,16 @@ const sendStrike = (): Promise<void> => {
 
 describe('Client', () => {
     it(`Should be able to call start`, async () => {
-        const client = new Thunder.Client();
+        const client = new Client();
         expect(await client.start()).to.equal(undefined);
     });
 
     it(`Should receive heartbeat`, async () => {
-        const client = new Thunder.Client();
+        const client = new Client();
         const heartbeat = { func: (): void => { /** empty */} };
         const spy = vi.spyOn(heartbeat, 'func');
 
-        client.on(Thunder.Events.HEARTBEAT, heartbeat.func);
+        client.on(Events.HEARTBEAT, heartbeat.func);
 
         await client.start();
         await sendHeartbeat();
@@ -61,11 +61,11 @@ describe('Client', () => {
     });
 
     it(`Should receive strike`, async () => {
-        const client = new Thunder.Client();
+        const client = new Client();
         const strike = { func: (): void => { /** empty */} };
         const spy = vi.spyOn(strike, 'func');
 
-        client.on(Thunder.Events.STRIKE, strike.func);
+        client.on(Events.STRIKE, strike.func);
 
         await client.start();
         await sendStrike();
@@ -74,12 +74,12 @@ describe('Client', () => {
     });
 
     it(`Should be able to call stop`, () => {
-        const client = new Thunder.Client();
+        const client = new Client();
         expect(client.stop()).to.equal(undefined);
     });
 
     it(`WebSocket should be NOT be null after start`, async () => {
-        const client = new Thunder.Client();
+        const client = new Client();
 
         await client.start();
 
@@ -88,7 +88,7 @@ describe('Client', () => {
     });
 
     it(`WebSocket should be be null after stop`, async () => {
-        const client = new Thunder.Client();
+        const client = new Client();
 
         await client.start();
         client.stop();
